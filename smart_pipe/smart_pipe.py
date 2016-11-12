@@ -157,10 +157,11 @@ class ZlibWrapper:
     def pull_block(self, block_size):
         """
         Read next optionally compressed chunk of data from disk
-        :param block_size: size of block in bytes
+        :param block_size: size of block in bytes or None for last block
         :return:
         """
-        self._buffer = self._fd.read(block_size)
+        size = block_size if block_size is not None else -1
+        self._buffer = self._fd.read(size)
         if self.compressed:
             self._buffer = zlib.decompress(self._buffer)
 

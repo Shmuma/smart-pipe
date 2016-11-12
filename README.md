@@ -7,6 +7,7 @@ Quite frequently it is required to save large amount of objects for later sequen
 For example: list of downloaded files, entries queried from DB, log entries, etc.
 
 Such storage can be organized in various ways, like:
+
 1. dump all entries in one file, 
 2. create tar archive,
 3. save in sqlite db, etc.

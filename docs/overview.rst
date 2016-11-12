@@ -40,3 +40,17 @@ But let's look at small example.
         for key, value in reader.pull_block():
             print("  key: %s, value len %d" % (str(key), len(value)))
     reader.close()
+..
+
+Result of this code will be two files **my_data.datz** with actual data and **my_data.idx** with block index.
+Code output:
+
+.. code-block:: console
+
+    Processing block: block-1
+      key: info, value len 5
+      key: other-info, value len 6
+    Processing block: block-2
+      key: info, value len 17
+      key: error, value len 12
+..

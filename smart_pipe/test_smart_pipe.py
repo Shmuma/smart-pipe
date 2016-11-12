@@ -4,7 +4,7 @@ import shutil
 import tempfile
 from unittest import TestCase
 
-import smart_pipe
+from . import smart_pipe
 
 
 class TestSmartPipeWriter(TestCase):

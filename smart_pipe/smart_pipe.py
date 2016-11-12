@@ -86,7 +86,8 @@ class IndexWriter:
     def __str__(self):
         return "IndexWriter[{path}, entries={entries}]".format(path=self.path, entries=self._entries)
 
-    def _open_data_stream(self, path):
+    @staticmethod
+    def _open_data_stream(path):
         return open(path, "wb")
 
     def close(self):
@@ -111,9 +112,10 @@ class IndexWriter:
 
 class IndexReader:
     def __init__(self, path):
-        self.ofs_map, self.keys = self._read_data(path)
+        self.ofs_map, self.keys = IndexReader._read_data(path)
 
-    def _read_data(self, path):
+    @staticmethod
+    def _read_data(path):
         ofs_map = {}
         keys = []
         with open(path, 'rb') as fd:
@@ -152,7 +154,7 @@ class ZlibWrapper:
         self._buffer = bytearray()
         self._fd.seek(ofs)
 
-    def _pull_block(self, block_size):
+    def pull_block(self, block_size):
         """
         Read next optionally compressed chunk of data from disk
         :param block_size: size of block in bytes
@@ -161,6 +163,7 @@ class ZlibWrapper:
         self._buffer = self._fd.read(block_size)
         if self.compressed:
             self._buffer = zlib.decompress(self._buffer)
+
 
 class SmartPipeReader:
     def __init__(self, path_prefix):
@@ -184,7 +187,7 @@ class SmartPipeReader:
             if not self._seek(index_key):
                 return
         comp_block_size, raw_block_size = self._get_block_sizes()
-        self._fd._pull_block(comp_block_size)
+        self._fd.pull_block(comp_block_size)
 
         while raw_block_size is None or raw_block_size > 0:
             dat = self._fd.read(4)

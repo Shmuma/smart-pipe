@@ -6,13 +6,16 @@
 Welcome to Smart Pipe's documentation!
 ======================================
 
+Small and fast storage container for key-value entries, optimized for
+sequential data access, but allowing fast individual entry lookup.
+
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
-    intro
-    tutorial
+   overview
+   tutorial
 
 Indices and tables
 ==================

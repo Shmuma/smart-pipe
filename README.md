@@ -1,5 +1,5 @@
 # smart-pipe
-Small and fast storage container for key-value entries, optimised for 
+Small and fast storage container for key-value entries, optimized for 
 sequential data access, but allowing fast individual entry lookup.
 
 ## Overview

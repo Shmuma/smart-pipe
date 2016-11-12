@@ -16,13 +16,13 @@ fast access and efficient on-disk storage.
 
 ## Quick example
 
-But let's look at usage example.
+But let's look at small example.
 
 ```python
 import smart_pipe as sp
 
 # save some data
-writer = sp.SmartPipeWriter("path/data", compress=True)
+writer = sp.SmartPipeWriter("my_data", compress=True)
 writer.checkpoint(b'block-1')
 writer.append(b'info', b'value')
 writer.append(b'other-info', b'value2')
@@ -32,7 +32,7 @@ writer.append(b'error', b'failed, dude')
 writer.close()
 
 # read data back
-reader = sp.SmartPipeReader("path/data")
+reader = sp.SmartPipeReader("my_data")
 while True:
     block_key = reader.get_next_block_key()
     if block_key is None:

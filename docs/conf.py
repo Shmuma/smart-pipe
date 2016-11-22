@@ -343,3 +343,10 @@ texinfo_documents = [
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #
 # texinfo_no_detailmenu = False
+
+
+# import modules with aliases
+import sys
+sys.path.append("..")
+from smart_pipe import smart_pipe
+

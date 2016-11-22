@@ -31,10 +31,19 @@ def _make_index_path(prefix):
 
 
 class SmartPipeWriter:
+    """
+    Class which can create smart pipe file
+    """
     INDEX_EXT = ".idx"
     DATA_EXT = ".dat"
 
     def __init__(self, path_prefix, compress=False):
+        """
+        Constructs smart pipe writer
+
+        :param path_prefix: path prefix to be used. Extension for data and index files will be appended to this prefix
+        :param compress: boolean flag (False by default) indicating compression of data chunks
+        """
         self.index_writer = IndexWriter(_make_index_path(path_prefix))
         self.data_path = _make_data_path(path_prefix, compress)
         self._fd = open(self.data_path, mode='wb')
@@ -45,6 +54,9 @@ class SmartPipeWriter:
         self._raw_ofs = 0
 
     def close(self):
+        """
+        Closes smart pipe writer and flushes data to disk
+        """
         if self._fd:
             self._flush()
             self._fd.close()
@@ -52,6 +64,12 @@ class SmartPipeWriter:
         self.index_writer.close()
 
     def append(self, key, value):
+        """
+        Appends given key-value pair to current chunk
+
+        :param key: byte string with key
+        :param value: byte string with value
+        """
         k_len = len(key)
         v_len = len(value)
         data = struct.pack("<I", k_len)
@@ -65,6 +83,11 @@ class SmartPipeWriter:
         self._raw_ofs += 4 + 4 + k_len + v_len
 
     def checkpoint(self, key):
+        """
+        Flushes current chunk on disk and starts new with the given key
+
+        :param key: byte string with binary key
+        """
         self._flush()
         self.index_writer.append(key, self._fd.tell(), self._raw_ofs)
 
@@ -98,6 +121,7 @@ class IndexWriter:
     def append(self, key, ofs, raw_ofs):
         """
         Append entry to index
+
         :param key: binary key to remember
         :param ofs: offset in data stream which will be associated with that key
         :param raw_ofs: current offset in a raw data stream
@@ -167,13 +191,24 @@ class ZlibWrapper:
 
 
 class SmartPipeReader:
+    """
+    Reader for smart pipe data
+    """
     def __init__(self, path_prefix):
+        """
+        Constructs smart pipe reader
+
+        :param path_prefix: path prefix for smart pipe data and index files
+        """
         self.data_path, self.compressed = _detect_data_path(path_prefix)
         self._fd = ZlibWrapper(self.data_path, self.compressed)
         self.index = IndexReader(_make_index_path(path_prefix))
         self._next_key_ofs = 0
 
     def close(self):
+        """
+        Closes smart pipe reader
+        """
         if self._fd:
             self._fd.close()
             self._fd = None
@@ -181,6 +216,7 @@ class SmartPipeReader:
     def pull_block(self, index_key=None):
         """
         Get list of key,value pairs from next block
+
         :param index_key: optional key of block to seek
         :return: yield block records
         """
@@ -206,6 +242,7 @@ class SmartPipeReader:
     def _get_block_sizes(self):
         """
         Return size of the current block in bytes, both uncompressed and compressed sizes
+
         :return: tuple of (compressed size, uncompressed size) or None,None if it's a last block
         """
         if self._next_key_ofs+1 >= len(self.index.keys):
@@ -218,6 +255,7 @@ class SmartPipeReader:
     def get_next_block_key(self):
         """
         Return index key for the next block
+
         :return: key of the next block or None if we reached end of pipe
         """
         if self._next_key_ofs >= len(self.index.keys):
@@ -227,6 +265,7 @@ class SmartPipeReader:
     def _seek(self, key):
         """
         Perform seek on a given key.
+
         :param key:
         :return: return true if seek was successfull or not needed
         """

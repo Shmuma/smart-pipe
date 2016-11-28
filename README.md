@@ -43,3 +43,11 @@ while True:
         print("  key: %s, value len %d" % (str(key), len(value)))
 reader.close()
 ```
+
+## Installation
+
+```
+pip install smart_pipe
+```
+
+Full documentation: http://smart-pipe.readthedocs.io/en/latest/

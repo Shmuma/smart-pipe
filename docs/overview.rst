@@ -13,7 +13,7 @@ Unfortunately, if your access to data is expected to be sequential, those option
 fast access and efficient on-disk storage.
 
 Quick example
-=============
+-------------
 But let's look at small example.
 
 .. code-block:: python

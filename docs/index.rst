@@ -12,10 +12,12 @@ sequential data access, but allowing fast individual entry lookup.
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    overview
+   architecture
    tutorial
+   tools
    api
 
 Indices and tables
